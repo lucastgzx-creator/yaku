@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yaku Academia — Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080c10;
+  --surface: #0d1117;
+  --surface-2: #161b22;
+  --surface-3: #1c2128;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --text: #e6edf3;
+  --text-2: #8b949e;
+  --text-3: #484f58;
+  --accent: #2f81f7;
+  --accent-glow: rgba(47,129,247,0.15);
+  --accent-2: #3fb950;
+  --accent-3: #d2a8ff;
+  --amber: #e3b341;
+  --red: #f85149;
+  --cyan: #39d5ff;
+  --cyan-glow: rgba(57,213,255,0.12);
+  --font: 'Geist', -apple-system, sans-serif;
+  --mono: 'Geist Mono', monospace;
+  --nav-width: 240px;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--nav-width);
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.nav-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.nav-logo-mark {
+  width: 24px; height: 24px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.nav-logo-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+
+.nav-badge {
+  font-size: 10px;
+  color: var(--text-3);
+  font-family: var(--mono);
+  letter-spacing: 0.3px;
+}
+
+.nav-section {
+  padding: 16px 16px 4px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: none;
+  border-radius: 0;
+  transition: color 0.1s, background 0.1s;
+  position: relative;
+}
+
+.nav-item:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.nav-item.active {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-3);
+  flex-shrink: 0;
+}
+
+.nav-item.active .nav-dot,
+.nav-item:hover .nav-dot { background: var(--accent); }
+
+.nav-code .nav-dot { background: var(--text-3); }
+.nav-item.active.nav-code .nav-dot { background: var(--accent-3); }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--nav-width);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 64px 56px 56px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute;
+  top: -120px; left: 40%;
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(47,129,247,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(47,129,247,0.1);
+  border: 1px solid rgba(47,129,247,0.2);
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: 24px;
+  letter-spacing: 0.3px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.hero h1 span {
+  color: transparent;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--text-2);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  width: fit-content;
+  background: var(--surface);
+}
+
+.hero-stat {
+  padding: 14px 24px;
+  border-right: 1px solid var(--border);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 1px;
+  letter-spacing: 0.2px;
+}
+
+/* ── CONTENT ── */
+.content {
+  padding: 40px 56px 80px;
+  max-width: 860px;
+}
+
+/* ── CHAPTER ── */
+.chapter {
+  margin: 56px 0 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.chapter:first-child { margin-top: 0; }
+
+.chapter-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  background: rgba(47,129,247,0.1);
+  border: 1px solid rgba(47,129,247,0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.chapter h2 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+.chapter-desc {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-left: auto;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 44px; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.section-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.badge-blue {
+  background: rgba(47,129,247,0.1);
+  border: 1px solid rgba(47,129,247,0.2);
+  color: var(--accent);
+}
+
+.badge-green {
+  background: rgba(63,185,80,0.1);
+  border: 1px solid rgba(63,185,80,0.2);
+  color: var(--accent-2);
+}
+
+.badge-amber {
+  background: rgba(227,179,65,0.1);
+  border: 1px solid rgba(227,179,65,0.2);
+  color: var(--amber);
+}
+
+.badge-red {
+  background: rgba(248,81,73,0.1);
+  border: 1px solid rgba(248,81,73,0.2);
+  color: var(--red);
+}
+
+.badge-purple {
+  background: rgba(210,168,255,0.1);
+  border: 1px solid rgba(210,168,255,0.2);
+  color: var(--accent-3);
+}
+
+.section-line {
+  height: 1px;
+  background: var(--border);
+  flex: 1;
+}
+
+p { color: var(--text-2); margin-bottom: 12px; font-size: 14px; }
+p strong { color: var(--text); font-weight: 500; }
+
+.sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 20px 0 8px;
+}
+
+ul {
+  list-style: none;
+  margin: 8px 0 16px;
+}
+
+ul li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 11px;
+  width: 4px; height: 4px;
+  background: var(--text-3);
+  border-radius: 50%;
+}
+
+ul li strong { color: var(--text); font-weight: 500; }
+
+/* ── TABLES ── */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead tr {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+
+tbody td {
+  padding: 10px 14px;
+  color: var(--text-2);
+  vertical-align: top;
+}
+
+.td-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.td-type {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-3);
+  white-space: nowrap;
+}
+
+.td-role { font-weight: 500; color: var(--text); }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  margin: 16px 0;
+  font-size: 13px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid;
+}
+
+.callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+.callout-content { flex: 1; }
+
+.callout-title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.callout-text { color: var(--text-2); line-height: 1.6; }
+
+.callout.info {
+  background: rgba(47,129,247,0.05);
+  border-color: rgba(47,129,247,0.15);
+}
+.callout.info .callout-title { color: var(--accent); }
+
+.callout.warn {
+  background: rgba(227,179,65,0.05);
+  border-color: rgba(227,179,65,0.15);
+}
+.callout.warn .callout-title { color: var(--amber); }
+
+.callout.logic {
+  background: rgba(210,168,255,0.05);
+  border-color: rgba(210,168,255,0.15);
+}
+.callout.logic .callout-title { color: var(--accent-3); }
+
+.callout.success {
+  background: rgba(63,185,80,0.05);
+  border-color: rgba(63,185,80,0.15);
+}
+.callout.success .callout-title { color: var(--accent-2); }
+
+/* ── FLOW ── */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.flow-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  font-size: 13px;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.flow-item:last-child { border-bottom: none; }
+.flow-item:hover { background: var(--surface-2); }
+
+.flow-icon { flex-shrink: 0; font-size: 13px; }
+
+/* ── RELATION BLOCKS ── */
+.relation {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin: 12px 0;
+  transition: border-color 0.15s;
+}
+
+.relation:hover { border-color: var(--border-2); }
+
+.relation-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.relation-title::before {
+  content: '';
+  width: 3px; height: 12px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  transition: border-color 0.15s;
+}
+
+.kpi:hover { border-color: var(--border-2); }
+
+.kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+
+.kpi-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+/* ── STEP LIST ── */
+ol.steps {
+  list-style: none;
+  counter-reset: s;
+  margin: 12px 0;
+}
+
+ol.steps li {
+  counter-increment: s;
+  padding: 8px 0 8px 36px;
+  position: relative;
+  font-size: 13px;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+}
+
+ol.steps li:last-child { border-bottom: none; }
+
+ol.steps li::before {
+  content: counter(s);
+  position: absolute;
+  left: 0; top: 8px;
+  width: 20px; height: 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+}
+
+/* ── INFRA TABLE ── */
+.infra-cost {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+
+/* ── CODE INLINE ── */
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--accent-3);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.footer-right {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .main { margin-left: 0; }
+  .hero { padding: 40px 24px 36px; }
+  .hero h1 { font-size: 26px; }
+  .hero-stats { width: 100%; }
+  .hero-stat { padding: 12px 16px; flex: 1; }
+  .content { padding: 28px 24px 60px; }
+  .footer { padding: 16px 24px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .table-wrap { overflow-x: auto; }
+  .chapter { flex-wrap: wrap; gap: 8px; }
+  .chapter-desc { display: none; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero > * {
+  animation: fadeUp 0.4s ease both;
+}
+
+.hero > *:nth-child(2) { animation-delay: 0.05s; }
+.hero > *:nth-child(3) { animation-delay: 0.1s; }
+.hero > *:nth-child(4) { animation-delay: 0.15s; }
+.hero > *:nth-child(5) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-header">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">🏊</div>
+      <span class="nav-logo-text">Yaku Academia</span>
+    </div>
+    <div class="nav-badge">blueprint · v1.0 · fase 1</div>
+  </div>
+
+  <span class="nav-section">Parte 1 — Frontend</span>
+  <a href="#login" class="nav-item"><span class="nav-dot"></span>Login y roles</a>
+  <a href="#dashboard" class="nav-item"><span class="nav-dot"></span>Dashboard</a>
+  <a href="#alumnos" class="nav-item"><span class="nav-dot"></span>Alumnos</a>
+  <a href="#asistencias" class="nav-item"><span class="nav-dot"></span>Asistencias</a>
+  <a href="#caja" class="nav-item"><span class="nav-dot"></span>Caja</a>
+  <a href="#almacen" class="nav-item"><span class="nav-dot"></span>Almacén</a>
+  <a href="#reportes" class="nav-item"><span class="nav-dot"></span>Reportes</a>
+  <a href="#horarios" class="nav-item"><span class="nav-dot"></span>Horarios</a>
+
+  <span class="nav-section">Parte 2 — Backend</span>
+  <a href="#t-usuarios" class="nav-item nav-code"><span class="nav-dot"></span>usuarios</a>
+  <a href="#t-alumnos" class="nav-item nav-code"><span class="nav-dot"></span>alumnos</a>
+  <a href="#t-asistencias" class="nav-item nav-code"><span class="nav-dot"></span>asistencias</a>
+  <a href="#t-recuperaciones" class="nav-item nav-code"><span class="nav-dot"></span>recuperaciones</a>
+  <a href="#t-pagos" class="nav-item nav-code"><span class="nav-dot"></span>pagos</a>
+  <a href="#t-turnos" class="nav-item nav-code"><span class="nav-dot"></span>turnos_caja</a>
+  <a href="#t-productos" class="nav-item nav-code"><span class="nav-dot"></span>productos</a>
+  <a href="#t-ventas" class="nav-item nav-code"><span class="nav-dot"></span>ventas_almacen</a>
+  <a href="#t-horarios" class="nav-item nav-code"><span class="nav-dot"></span>horarios</a>
+  <a href="#relaciones" class="nav-item"><span class="nav-dot"></span>Relaciones clave</a>
+
+  <span class="nav-section">Parte 3 — Infra</span>
+  <a href="#infra" class="nav-item"><span class="nav-dot"></span>Servicios y costos</a>
+  <a href="#seguridad" class="nav-item"><span class="nav-dot"></span>Acceso y seguridad</a>
+</nav>
+
+<div class="main">
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-eyebrow">Versión 1.0 · Fase 1 · Abril 2025</div>
+    <h1>Yaku Academia<br><span>Blueprint del Sistema</span></h1>
+    <p class="hero-desc">Documentación completa del sistema de gestión: módulos, pantallas, base de datos e infraestructura.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Módulos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">9</div>
+        <div class="hero-stat-label">Tablas BD</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label">Roles</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">$0</div>
+        <div class="hero-stat-label">Infra Fase 1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- PARTE 1 -->
+    <div class="chapter">
+      <span class="chapter-tag">Parte 01</span>
+      <h2>Frontend</h2>
+      <span class="chapter-desc">Qué ve y qué hace cada usuario</span>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="section" id="login">
+      <div class="section-header">
+        <span class="section-title">Login y roles</span>
+        <div class="section-line"></div>
+      </div>
+      <p>El sistema arranca con una pantalla de login. Dos roles con accesos completamente distintos:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rol</th><th>Acceso a</th><th>Sin acceso a</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="td-role">Secretaria</span></td>
+              <td>Alumnos, Asistencias, Caja, Almacén, Horarios (solo lectura)</td>
+              <td>Dashboard, Reportes, configuración de horarios</td>
+            </tr>
+            <tr>
+              <td><span class="td-role">Dueño</span></td>
+              <td>Todo el sistema sin excepción</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="section" id="dashboard">
+      <div class="section-header">
+        <span class="section-title">Dashboard</span>
+        <span class="section-badge badge-blue">solo dueño</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Primera pantalla del dueño al entrar. Estado operativo y financiero del día en un vistazo.</p>
+
+      <div class="sub">KPIs — 4 tarjetas superiores</div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">Alumnos activos</div><div class="kpi-desc">Total con plan vigente y clases disponibles</div></div>
+        <div class="kpi"><div class="kpi-label">Alumnos vencidos</div><div class="kpi-desc">Sin clases disponibles, pendientes de renovar</div></div>
+        <div class="kpi"><div class="kpi-label">Ingresos del día</div><div class="kpi-desc">Suma total de pagos de hoy — efectivo + digital</div></div>
+        <div class="kpi"><div class="kpi-label">Alumnos en alerta</div><div class="kpi-desc">A 2 clases de quedarse sin plan</div></div>
+        <div class="kpi"><div class="kpi-label">Gráfico 7 días</div><div class="kpi-desc">Barras apiladas por método de pago</div></div>
+        <div class="kpi"><div class="kpi-label">Tasa de retención</div><div class="kpi-desc">Renovaron vs. no renovaron este mes</div></div>
+      </div>
+
+      <div class="sub">Panel de alertas del día</div>
+      <ul>
+        <li>Lista de alumnos en <strong>última clase disponible</strong> — para llamarlos y ofrecer renovación</li>
+        <li>Lista de alumnos con <strong>plan vencido</strong> — para seguimiento</li>
+        <li>Tabla de los <strong>últimos 5 pagos</strong> del día: alumno, concepto, método, monto, hora</li>
+      </ul>
+      <div class="callout info">
+        <span class="callout-icon">→</span>
+        <div class="callout-content">
+          <div class="callout-title">Nota</div>
+          <div class="callout-text">El dashboard es solo lectura. Toda la operación se hace desde los módulos correspondientes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALUMNOS -->
+    <div class="section" id="alumnos">
+      <div class="section-header">
+        <span class="section-title">Alumnos</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Central operativa del sistema. Gestión de matrículas, pagos, asistencias individuales y estado de cada alumno.</p>
+
+      <div class="sub">Vista principal</div>
+      <p>Barra superior con <strong>buscador</strong> (nombre, apellido o DNI), <strong>filtro de estado</strong> (Todos / Activos / Vencidos / En alerta) y botón <strong>+ Matricular alumno</strong>.</p>
+      <ul>
+        <li>Código del alumno — ej. <code>YK-001</code></li>
+        <li>Nombre completo, plan, turno</li>
+        <li><strong>Clases</strong> — barra de progreso: <span class="section-badge badge-green">verde</span> con holgura · <span class="section-badge badge-amber">naranja</span> en alerta · <span class="section-badge badge-red">rojo</span> última o vencido</li>
+        <li><strong>Estado</strong> — badge: <span class="section-badge badge-green">Activo</span> · <span class="section-badge badge-amber">En alerta</span> · <span class="section-badge badge-red">Vencido</span></li>
+      </ul>
+
+      <div class="sub">Formulario de matrícula</div>
+      <ul>
+        <li>Nombres, apellidos, DNI, teléfono, dirección, edad, género</li>
+        <li>Tipo (Nadador / Profesor), instructor asignado</li>
+        <li>Turno — Mañana (5am–12pm) / Tarde (12pm–6pm) / Noche (6pm–10pm)</li>
+        <li>Plan — 2, 3 o 5 días por semana</li>
+        <li>Días de entrenamiento — selector visual con los 7 días</li>
+        <li>Horario específico — bloque dentro del turno (ej. 7am–8am)</li>
+        <li>Método de pago — Efectivo / Yape / Plin / Transferencia</li>
+        <li>Monto pagado, descuento (ej. 10% promo hermanos), observaciones</li>
+      </ul>
+      <div class="callout warn">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-content">
+          <div class="callout-title">Flujo de efectivo</div>
+          <div class="callout-text">Si el método de pago es Efectivo, al guardar se abre automáticamente una ventana de cobro que muestra el monto, pide el efectivo recibido y calcula el vuelto. Ese vuelto se registra en Caja.</div>
+        </div>
+      </div>
+
+      <div class="sub">Detalle del alumno — panel lateral</div>
+      <ul>
+        <li>Encabezado con nombre, código y badge de estado</li>
+        <li>Días de entrenamiento marcados visualmente — <strong>editables</strong></li>
+        <li>Contador de clases grande: <strong>"7 de 8 clases usadas"</strong> con barra de progreso</li>
+        <li>Últimas 5 asistencias: fecha, hora y tipo (Normal / Recuperación / Fuera de horario)</li>
+        <li>Últimos 5 pagos: fecha, concepto, método y monto</li>
+        <li>Recuperaciones pendientes</li>
+      </ul>
+      <p><strong>Botones de acción:</strong> Renovar plan · Registrar recuperación · Editar datos</p>
+      <div class="callout warn">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-content">
+          <div class="callout-title">Corrección de errores</div>
+          <div class="callout-text">El botón 'Editar datos' permite corregir errores. Si la secretaria marcó una asistencia por error, el dueño puede revertirla desde el historial del alumno.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASISTENCIAS -->
+    <div class="section" id="asistencias">
+      <div class="section-header">
+        <span class="section-title">Asistencias</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Dos secciones dentro del mismo módulo: registro del día e historial completo.</p>
+
+      <div class="sub">Sección 1 — Registro</div>
+      <p>Combobox de búsqueda en tiempo real por nombre o código. Preparado para huella digital en Fase 3.</p>
+      <div class="flow">
+        <div class="flow-item"><span class="flow-icon">✓</span><span><strong style="color:#3fb950">Tiene clases disponibles</strong> — registra, descuenta 1 clase, muestra confirmación con nuevo contador</span></div>
+        <div class="flow-item"><span class="flow-icon">!</span><span><strong style="color:#e3b341">Está en la última clase</strong> — registra, descuenta, muestra alerta "¡Última clase! Ofrecer renovación"</span></div>
+        <div class="flow-item"><span class="flow-icon">✕</span><span><strong style="color:#f85149">Sin clases disponibles</strong> — bloquea el registro: "Sin clases disponibles — renovar plan"</span></div>
+        <div class="flow-item"><span class="flow-icon">~</span><span><strong style="color:#8b949e">Fuera de horario</strong> — registra pero marca la asistencia como "Fuera de horario"</span></div>
+      </div>
+      <div class="callout logic">
+        <span class="callout-icon">◈</span>
+        <div class="callout-content">
+          <div class="callout-title">Lógica del sistema</div>
+          <div class="callout-text">Una recuperación agendada funciona como un pase especial. Si el alumno tiene una recuperación registrada para ese día y hora, el sistema la reconoce como 'Recuperación' en vez de 'Fuera de horario', sin descontar clase adicional.</div>
+        </div>
+      </div>
+
+      <div class="sub">Sección 2 — Historial</div>
+      <p>Filtros: por fecha, por alumno, por turno, por tipo. Las filas "Fuera de horario" aparecen destacadas visualmente.</p>
+    </div>
+
+    <!-- CAJA -->
+    <div class="section" id="caja">
+      <div class="section-header">
+        <span class="section-title">Caja</span>
+        <span class="section-badge badge-blue">solo dueño</span>
+        <span class="section-badge badge-purple">lectura secretaria</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Controla el efectivo físico de la academia. Solo maneja pagos en efectivo — los digitales van directo a reportes.</p>
+
+      <div class="sub">Estado actual</div>
+      <ul>
+        <li>Turno activo con responsable y hora de inicio</li>
+        <li>Fondo de caja inicial — lo define el dueño al abrir el turno</li>
+        <li>Efectivo cobrado este turno — suma automática</li>
+        <li><strong>Vueltos entregados — calculados automáticamente, nunca se ingresan manualmente</strong></li>
+        <li><strong>Total esperado en caja</strong> = fondo inicial + efectivo cobrado − vueltos</li>
+      </ul>
+
+      <div class="sub">Flujo de cobro en efectivo</div>
+      <ol class="steps">
+        <li>El sistema muestra el monto a cobrar</li>
+        <li>La secretaria ingresa el efectivo recibido del cliente</li>
+        <li>El sistema calcula el vuelto automáticamente</li>
+        <li>Al confirmar: cobro se suma al efectivo, vuelto se registra como salida de caja</li>
+      </ol>
+      <div class="callout warn">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-content">
+          <div class="callout-title">Control antifraude</div>
+          <div class="callout-text">El sistema nunca le pregunta a la secretaria cuánto vuelto dio. Lo calcula solo. Esto elimina la posibilidad de reportar un vuelto mayor al real para quedarse con la diferencia.</div>
+        </div>
+      </div>
+
+      <div class="sub">Cierre de turno</div>
+      <ul>
+        <li>El dueño ingresa cuánto hay físicamente en caja</li>
+        <li>Sistema compara: monto declarado vs monto esperado</li>
+        <li>Si hay diferencia, queda registrada con fecha, turno y responsable</li>
+      </ul>
+    </div>
+
+    <!-- ALMACÉN -->
+    <div class="section" id="almacen">
+      <div class="section-header">
+        <span class="section-title">Almacén</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Gestiona inventario y ventas. Dividido en dos pestañas: Inventario y Ventas.</p>
+
+      <div class="sub">Pestaña Inventario — tres categorías</div>
+      <ul>
+        <li><strong>Venta</strong> — gorros de natación, lentes, toallas de microfibra</li>
+        <li><strong>Material de clases</strong> — tablas de natación, flotadores, kickboards</li>
+        <li><strong>Limpieza</strong> — cloro, escobilla, alcohol en gel</li>
+      </ul>
+      <p>Stock actual, mínimo y precio por producto. Alerta visual si el stock llega al mínimo. Botones: <strong>Registrar venta</strong> (solo categoría Venta, dispara flujo de caja si es efectivo) y <strong>Ingreso de stock</strong> (todas las categorías).</p>
+
+      <div class="sub">Pestaña Ventas</div>
+      <p>Historial completo: Fecha · Producto · Cantidad · Método · Total · Vendido por. KPI de total de ingresos del almacén en el mes.</p>
+    </div>
+
+    <!-- REPORTES -->
+    <div class="section" id="reportes">
+      <div class="section-header">
+        <span class="section-title">Reportes</span>
+        <span class="section-badge badge-blue">solo dueño</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Dashboard financiero completo. Selector de período: Hoy / Esta semana / Este mes / Personalizado.</p>
+
+      <div class="sub">KPIs del período</div>
+      <ul>
+        <li>Total de ingresos, efectivo, digital (Yape + Plin + Transferencia desglosados)</li>
+        <li>Alumnos nuevos y renovaciones</li>
+        <li><strong>Tasa de retención</strong> — % de alumnos que renovaron vs los que vencieron</li>
+      </ul>
+
+      <div class="sub">Gráficos</div>
+      <ul>
+        <li>Línea de ingresos por día en el período</li>
+        <li>Dona de distribución por método de pago</li>
+        <li>Barras de matrículas nuevas por semana</li>
+      </ul>
+      <p>Tabla de pagos detallada con fila de totales y <strong>botón "Exportar a Excel"</strong> que descarga como CSV.</p>
+    </div>
+
+    <!-- HORARIOS -->
+    <div class="section" id="horarios">
+      <div class="section-header">
+        <span class="section-title">Horarios</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Gestiona los bloques horarios. La piscina opera de <strong>5am a 10pm</strong>.</p>
+
+      <div class="sub">Vista (secretaria — solo lectura)</div>
+      <ul>
+        <li>Grilla semanal con capacidad máxima y alumnos matriculados por bloque</li>
+        <li>Indicador: <span class="section-badge badge-green">hay cupo</span> · <span class="section-badge badge-amber">casi lleno</span> · <span class="section-badge badge-red">lleno</span></li>
+      </ul>
+
+      <div class="sub">Gestión (dueño — edición completa)</div>
+      <ul>
+        <li>Crear nuevo bloque: día, hora inicio, hora fin, capacidad máxima</li>
+        <li>Editar capacidad o desactivar horarios</li>
+      </ul>
+      <div class="callout logic">
+        <span class="callout-icon">◈</span>
+        <div class="callout-content">
+          <div class="callout-title">Lógica del sistema</div>
+          <div class="callout-text">Al matricular o agendar una recuperación, el sistema verifica que el horario tenga cupo. Si está lleno, bloquea la asignación.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTE 2 -->
+    <div class="chapter">
+      <span class="chapter-tag">Parte 02</span>
+      <h2>Backend y lógica</h2>
+      <span class="chapter-desc">Tablas Supabase y relaciones</span>
+    </div>
+
+    <p>El sistema usa <strong>Supabase</strong> — PostgreSQL gestionado. Cada tabla tiene un campo <code>id</code> UUID generado automáticamente. Las relaciones se hacen referenciando ese id entre tablas.</p>
+
+    <!-- TABLA USUARIOS -->
+    <div class="section" id="t-usuarios">
+      <div class="section-header">
+        <span class="section-title"><code>usuarios</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">nombre</td><td class="td-type">text</td><td>Nombre completo</td></tr>
+            <tr><td class="td-name">email</td><td class="td-type">text</td><td>Email de acceso al sistema</td></tr>
+            <tr><td class="td-name">rol</td><td class="td-type">enum</td><td>'secretaria' o 'dueno'</td></tr>
+            <tr><td class="td-name">activo</td><td class="td-type">bool</td><td>Si está activo o fue deshabilitado</td></tr>
+            <tr><td class="td-name">creado_en</td><td class="td-type">timestamp</td><td>Fecha y hora de creación</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA ALUMNOS -->
+    <div class="section" id="t-alumnos">
+      <div class="section-header">
+        <span class="section-title"><code>alumnos</code></span>
+        <div class="section-line"></div>
+      </div>
+      <p>Tabla central del sistema. Cada fila es un alumno matriculado.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">codigo</td><td class="td-type">text</td><td>Código legible: YK-001, YK-002...</td></tr>
+            <tr><td class="td-name">nombres</td><td class="td-type">text</td><td>Nombres del alumno</td></tr>
+            <tr><td class="td-name">apellidos</td><td class="td-type">text</td><td>Apellidos del alumno</td></tr>
+            <tr><td class="td-name">dni</td><td class="td-type">text</td><td>DNI de 8 dígitos</td></tr>
+            <tr><td class="td-name">telefono</td><td class="td-type">text</td><td>Número de contacto</td></tr>
+            <tr><td class="td-name">direccion</td><td class="td-type">text</td><td>Dirección de residencia</td></tr>
+            <tr><td class="td-name">edad</td><td class="td-type">int</td><td>Edad del alumno</td></tr>
+            <tr><td class="td-name">genero</td><td class="td-type">enum</td><td>'M' o 'F'</td></tr>
+            <tr><td class="td-name">tipo</td><td class="td-type">enum</td><td>'Nadador' o 'Profesor'</td></tr>
+            <tr><td class="td-name">instructor_id</td><td class="td-type">uuid</td><td>Referencia al instructor asignado</td></tr>
+            <tr><td class="td-name">turno</td><td class="td-type">enum</td><td>'Mañana', 'Tarde' o 'Noche'</td></tr>
+            <tr><td class="td-name">horario_id</td><td class="td-type">uuid</td><td>Referencia al bloque horario específico</td></tr>
+            <tr><td class="td-name">plan_dias</td><td class="td-type">int</td><td>Días por semana: 2, 3 o 5</td></tr>
+            <tr><td class="td-name">clases_total</td><td class="td-type">int</td><td>Total de clases del plan contratado</td></tr>
+            <tr><td class="td-name">clases_usadas</td><td class="td-type">int</td><td>Clases consumidas. Se incrementa en cada asistencia</td></tr>
+            <tr><td class="td-name">dias_entrenamiento</td><td class="td-type">jsonb</td><td>{lun: true, mar: false, mie: true...}</td></tr>
+            <tr><td class="td-name">estado</td><td class="td-type">computed</td><td>Activo / En alerta / Vencido — calculado automáticamente</td></tr>
+            <tr><td class="td-name">fecha_inicio</td><td class="td-type">date</td><td>Fecha en que inició el plan actual</td></tr>
+            <tr><td class="td-name">descuento</td><td class="td-type">numeric</td><td>Porcentaje de descuento aplicado (0 si no hay)</td></tr>
+            <tr><td class="td-name">observaciones</td><td class="td-type">text</td><td>Notas libres</td></tr>
+            <tr><td class="td-name">activo</td><td class="td-type">bool</td><td>Si está activo o fue dado de baja</td></tr>
+            <tr><td class="td-name">creado_en</td><td class="td-type">timestamp</td><td>Fecha de matrícula</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA ASISTENCIAS -->
+    <div class="section" id="t-asistencias">
+      <div class="section-header">
+        <span class="section-title"><code>asistencias</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">alumno_id</td><td class="td-type">uuid</td><td>Referencia al alumno</td></tr>
+            <tr><td class="td-name">fecha</td><td class="td-type">date</td><td>Fecha de la asistencia</td></tr>
+            <tr><td class="td-name">hora</td><td class="td-type">text</td><td>Hora exacta (HH:MM)</td></tr>
+            <tr><td class="td-name">turno</td><td class="td-type">enum</td><td>'Mañana', 'Tarde' o 'Noche'</td></tr>
+            <tr><td class="td-name">tipo</td><td class="td-type">enum</td><td>'Normal', 'Recuperación' o 'Fuera de horario'</td></tr>
+            <tr><td class="td-name">en_horario</td><td class="td-type">bool</td><td>Si fue dentro del horario asignado</td></tr>
+            <tr><td class="td-name">registrado_por</td><td class="td-type">uuid</td><td>Usuario que registró la asistencia</td></tr>
+            <tr><td class="td-name">creado_en</td><td class="td-type">timestamp</td><td>Timestamp del registro</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA RECUPERACIONES -->
+    <div class="section" id="t-recuperaciones">
+      <div class="section-header">
+        <span class="section-title"><code>recuperaciones</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">alumno_id</td><td class="td-type">uuid</td><td>Referencia al alumno</td></tr>
+            <tr><td class="td-name">fecha_falta</td><td class="td-type">date</td><td>Fecha en que el alumno no asistió</td></tr>
+            <tr><td class="td-name">fecha_recuperacion</td><td class="td-type">date</td><td>Fecha agendada (null si aún no se agendó)</td></tr>
+            <tr><td class="td-name">horario_recuperacion</td><td class="td-type">text</td><td>Hora y turno de la recuperación</td></tr>
+            <tr><td class="td-name">estado</td><td class="td-type">enum</td><td>'Pendiente', 'Agendada', 'Completada'</td></tr>
+            <tr><td class="td-name">asistencia_id</td><td class="td-type">uuid</td><td>Referencia a la asistencia generada al completarse</td></tr>
+            <tr><td class="td-name">creado_en</td><td class="td-type">timestamp</td><td>Fecha en que se detectó la falta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA PAGOS -->
+    <div class="section" id="t-pagos">
+      <div class="section-header">
+        <span class="section-title"><code>pagos</code></span>
+        <div class="section-line"></div>
+      </div>
+      <p>Fuente de verdad para todos los reportes financieros.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">alumno_id</td><td class="td-type">uuid</td><td>Referencia al alumno (null si es venta sin alumno)</td></tr>
+            <tr><td class="td-name">concepto</td><td class="td-type">enum</td><td>'Matrícula', 'Renovación', 'Venta de producto'</td></tr>
+            <tr><td class="td-name">monto</td><td class="td-type">numeric</td><td>Monto cobrado en soles</td></tr>
+            <tr><td class="td-name">metodo_pago</td><td class="td-type">enum</td><td>'Efectivo', 'Yape', 'Plin', 'Transferencia'</td></tr>
+            <tr><td class="td-name">efectivo_recibido</td><td class="td-type">numeric</td><td>Solo efectivo — cuánto entregó el cliente</td></tr>
+            <tr><td class="td-name">vuelto</td><td class="td-type">numeric</td><td>Solo efectivo — diferencia entre recibido y monto</td></tr>
+            <tr><td class="td-name">recibido_por</td><td class="td-type">uuid</td><td>Usuario que registró el pago</td></tr>
+            <tr><td class="td-name">fecha</td><td class="td-type">date</td><td>Fecha del pago</td></tr>
+            <tr><td class="td-name">hora</td><td class="td-type">text</td><td>Hora del pago (HH:MM)</td></tr>
+            <tr><td class="td-name">turno_caja_id</td><td class="td-type">uuid</td><td>Referencia al turno de caja activo (solo efectivo)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA TURNOS CAJA -->
+    <div class="section" id="t-turnos">
+      <div class="section-header">
+        <span class="section-title"><code>turnos_caja</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">turno</td><td class="td-type">enum</td><td>'Mañana', 'Tarde' o 'Noche'</td></tr>
+            <tr><td class="td-name">fecha</td><td class="td-type">date</td><td>Fecha del turno</td></tr>
+            <tr><td class="td-name">responsable_id</td><td class="td-type">uuid</td><td>Usuario responsable</td></tr>
+            <tr><td class="td-name">fondo_inicial</td><td class="td-type">numeric</td><td>Monto en soles con el que abrió la caja</td></tr>
+            <tr><td class="td-name">hora_apertura</td><td class="td-type">timestamp</td><td>Cuándo se abrió el turno</td></tr>
+            <tr><td class="td-name">hora_cierre</td><td class="td-type">timestamp</td><td>Cuándo se cerró (null si está abierto)</td></tr>
+            <tr><td class="td-name">monto_declarado_cierre</td><td class="td-type">numeric</td><td>Lo que el responsable dice que hay físicamente al cerrar</td></tr>
+            <tr><td class="td-name">diferencia</td><td class="td-type">computed</td><td>Declarado − esperado. Positivo = sobrante, negativo = faltante</td></tr>
+            <tr><td class="td-name">cerrado_por</td><td class="td-type">uuid</td><td>Usuario que cerró el turno</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA PRODUCTOS -->
+    <div class="section" id="t-productos">
+      <div class="section-header">
+        <span class="section-title"><code>productos</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">nombre</td><td class="td-type">text</td><td>Nombre del producto</td></tr>
+            <tr><td class="td-name">categoria</td><td class="td-type">enum</td><td>'Venta', 'Material de clases' o 'Limpieza'</td></tr>
+            <tr><td class="td-name">stock</td><td class="td-type">int</td><td>Unidades disponibles actualmente</td></tr>
+            <tr><td class="td-name">stock_minimo</td><td class="td-type">int</td><td>Umbral de alerta de stock bajo</td></tr>
+            <tr><td class="td-name">precio_venta</td><td class="td-type">numeric</td><td>Precio en soles (solo categoría Venta)</td></tr>
+            <tr><td class="td-name">precio_compra</td><td class="td-type">numeric</td><td>Costo de adquisición</td></tr>
+            <tr><td class="td-name">activo</td><td class="td-type">bool</td><td>Si está disponible o fue retirado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA VENTAS ALMACEN -->
+    <div class="section" id="t-ventas">
+      <div class="section-header">
+        <span class="section-title"><code>ventas_almacen</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">producto_id</td><td class="td-type">uuid</td><td>Referencia al producto vendido</td></tr>
+            <tr><td class="td-name">cantidad</td><td class="td-type">int</td><td>Unidades vendidas</td></tr>
+            <tr><td class="td-name">precio_unitario</td><td class="td-type">numeric</td><td>Precio al momento de la venta</td></tr>
+            <tr><td class="td-name">total</td><td class="td-type">computed</td><td>cantidad × precio_unitario</td></tr>
+            <tr><td class="td-name">pago_id</td><td class="td-type">uuid</td><td>Referencia al pago generado</td></tr>
+            <tr><td class="td-name">vendido_por</td><td class="td-type">uuid</td><td>Usuario que registró la venta</td></tr>
+            <tr><td class="td-name">fecha</td><td class="td-type">date</td><td>Fecha de la venta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLA HORARIOS -->
+    <div class="section" id="t-horarios">
+      <div class="section-header">
+        <span class="section-title"><code>horarios</code></span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">id</td><td class="td-type">uuid</td><td>Identificador único</td></tr>
+            <tr><td class="td-name">dia_semana</td><td class="td-type">enum</td><td>'Lunes', 'Martes'... 'Domingo'</td></tr>
+            <tr><td class="td-name">hora_inicio</td><td class="td-type">text</td><td>Hora de inicio (ej. '07:00')</td></tr>
+            <tr><td class="td-name">hora_fin</td><td class="td-type">text</td><td>Hora de fin (ej. '08:00')</td></tr>
+            <tr><td class="td-name">turno</td><td class="td-type">enum</td><td>'Mañana', 'Tarde' o 'Noche' — calculado automáticamente</td></tr>
+            <tr><td class="td-name">capacidad_maxima</td><td class="td-type">int</td><td>Máximo de alumnos permitidos en este bloque</td></tr>
+            <tr><td class="td-name">activo</td><td class="td-type">bool</td><td>Si está disponible para nuevas matrículas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RELACIONES -->
+    <div class="section" id="relaciones">
+      <div class="section-header">
+        <span class="section-title">Relaciones clave entre tablas</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="callout logic">
+        <span class="callout-icon">◈</span>
+        <div class="callout-content">
+          <div class="callout-title">Lógica del sistema</div>
+          <div class="callout-text">Cuando se hace una acción en un módulo, el sistema actualiza múltiples tablas a la vez.</div>
+        </div>
+      </div>
+
+      <div class="relation">
+        <div class="relation-title">Cuando se registra una asistencia</div>
+        <ul>
+          <li>Se crea una fila en <code>asistencias</code></li>
+          <li>Se incrementa <code>clases_usadas</code> en <code>alumnos</code></li>
+          <li>Si <code>clases_usadas = clases_total − 2</code> → estado pasa a <span class="section-badge badge-amber">En alerta</span></li>
+          <li>Si <code>clases_usadas = clases_total</code> → estado pasa a <span class="section-badge badge-red">Vencido</span></li>
+        </ul>
+      </div>
+
+      <div class="relation">
+        <div class="relation-title">Cuando se registra un pago en efectivo</div>
+        <ul>
+          <li>Se crea una fila en <code>pagos</code> con el vuelto calculado automáticamente</li>
+          <li>Se actualiza <code>turnos_caja</code> activo: suma el efectivo cobrado y el vuelto</li>
+          <li>Si es renovación: <code>clases_usadas</code> se resetea a 0 y se actualiza <code>fecha_inicio</code></li>
+          <li>Si es venta de almacén: se descuenta stock en <code>productos</code> y se crea fila en <code>ventas_almacen</code></li>
+        </ul>
+      </div>
+
+      <div class="relation">
+        <div class="relation-title">Cuando se matricula un alumno nuevo</div>
+        <ul>
+          <li>Se crea una fila en <code>alumnos</code></li>
+          <li>Se crea una fila en <code>pagos</code> con concepto 'Matrícula'</li>
+          <li>Si el horario elegido tiene cupo → se permite la matrícula</li>
+          <li>Si el horario está lleno → el sistema bloquea y muestra error</li>
+        </ul>
+      </div>
+
+      <div class="relation">
+        <div class="relation-title">Cuando un alumno falta</div>
+        <ul>
+          <li>Si al final de su horario no hay asistencia → se crea fila en <code>recuperaciones</code> con estado 'Pendiente'</li>
+          <li>Al agendar → se actualiza con <code>fecha_recuperacion</code> y estado 'Agendada'</li>
+          <li>Al venir a recuperar → asistencia se marca tipo 'Recuperación', sin descontar clase adicional</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PARTE 3 -->
+    <div class="chapter">
+      <span class="chapter-tag">Parte 03</span>
+      <h2>Infraestructura</h2>
+      <span class="chapter-desc">Servicios y costos mensuales</span>
+    </div>
+
+    <p>El sistema vive en internet — no se instala en ninguna computadora. Para funcionar necesita hosting, base de datos y automatizaciones.</p>
+    <div class="callout success">
+      <span class="callout-icon">✓</span>
+      <div class="callout-content">
+        <div class="callout-title">Sin intermediarios</div>
+        <div class="callout-text">Todos estos servicios los paga la academia directamente con su tarjeta. Sin comisiones adicionales.</div>
+      </div>
+    </div>
+
+    <div class="section" id="infra">
+      <div class="section-header">
+        <span class="section-title">Servicios y costos</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Servicio</th><th>Para qué sirve</th><th>Costo / mes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Supabase</strong></td><td>Base de datos — alumnos, asistencias, pagos, caja, inventario</td><td class="infra-cost">$0</td></tr>
+            <tr><td><strong>Vercel</strong></td><td>Hosting de la aplicación web</td><td class="infra-cost">$0</td></tr>
+            <tr><td><strong>Dominio (.com)</strong></td><td>Dirección web personalizada — ej. gestion.yakuacademia.com</td><td class="infra-cost">~$1 / mes</td></tr>
+            <tr><td><strong>n8n</strong> <span class="section-badge badge-amber">Fase 2+</span></td><td>Automatizaciones: alertas WhatsApp, recibos, recordatorios</td><td class="infra-cost">~$15–20 / mes</td></tr>
+            <tr><td><strong>Nubefact</strong> <span class="section-badge badge-amber">Fase 2+</span></td><td>Emisión de boletas electrónicas certificadas por SUNAT</td><td class="infra-cost">~S/ 50–80 / mes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="callout-icon">→</span>
+        <div class="callout-content">
+          <div class="callout-title">Fase 1</div>
+          <div class="callout-text">Supabase y Vercel tienen planes gratuitos que cubren el uso inicial. El único gasto opcional es el dominio (~$12/año).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="seguridad">
+      <div class="section-header">
+        <span class="section-title">Acceso y seguridad</span>
+        <div class="section-line"></div>
+      </div>
+      <p>Funciona desde cualquier navegador en cualquier computadora con internet. Sin instalación. Optimizado para pantallas de escritorio o laptop (mínimo 1280px).</p>
+      <ul>
+        <li>Contraseñas almacenadas encriptadas — nunca en texto plano</li>
+        <li>Supabase implementa <strong>Row Level Security (RLS)</strong> — cada rol solo puede leer y escribir sus datos</li>
+        <li>Sesiones con expiración automática</li>
+        <li>Todo el tráfico encriptado por <strong>HTTPS</strong></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span class="footer-left">yaku-academia · blueprint · v1.0 · fase-1</span>
+    <span class="footer-right">Abril 2025</span>
+  </div>
+</div>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('[id]');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => {
+        n.classList.remove('active');
+        if (n.getAttribute('href') === '#' + e.target.id) n.classList.add('active');
+      });
+    }
+  });
+}, { rootMargin: '-10% 0px -80% 0px' });
+
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
